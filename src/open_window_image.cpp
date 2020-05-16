@@ -5,14 +5,17 @@ using namespace Rcpp;
 #include <GL/glew.h>
 //GLWF3 Installed with cmake, make install 
 #include <GLFW/glfw3.h>
+
 #include "glm/glm.hpp"
 #include "glm/gtx/transform.hpp" 
+
 #include "controls.h"
 #include "loadshaders.h"
 
 // [[Rcpp::export]]
-int open_window_rcpp(const CharacterVector vertex_shader, const CharacterVector fragment_shader,
-                    int width, int height, int type) {
+int open_window_image_rcpp(const CharacterVector vertex_shader, const CharacterVector fragment_shader,
+                      int width, int height, 
+                      NumericMatrix& r_layer,  NumericMatrix& g_layer,  NumericMatrix& b_layer) {
   if(!glfwInit()){
     return(-1);
   }
@@ -40,9 +43,30 @@ int open_window_rcpp(const CharacterVector vertex_shader, const CharacterVector 
   // Hide the mouse and enable unlimited movement
   // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   
+  //SETUP DONE
+  
+  //Create red texture
+  int texnx = r_layer.ncol();
+  int texny = r_layer.nrow();
+  
+  float *tex_array = new float[3*texnx*texny];
+  for(int i = 0; i < texny; i++) {
+    for(int j = 0; j < texnx; j++) {
+      tex_array[3*j + (3*texnx)*i] = b_layer(i,j);
+      tex_array[3*j+1 + (3*texnx)*i] = g_layer(i,j);
+      tex_array[3*j+2 + (3*texnx)*i] = r_layer(i,j);
+    }
+  }
+  //TEXTURE ARRAY DONE
+  
   glfwPollEvents();
   glfwSetCursorPos(window, nx/2, ny/2);
   glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+  // Enable depth test
+  glEnable(GL_DEPTH_TEST);
+  // Accept fragment if it closer to the camera than the former one
+  glDepthFunc(GL_LESS);
+  // glEnable(GL_CULL_FACE);
   
   GLuint VertexArrayID;
   glGenVertexArrays(1, &VertexArrayID);
@@ -52,16 +76,38 @@ int open_window_rcpp(const CharacterVector vertex_shader, const CharacterVector 
   GLuint programID = LoadShaders( vertex_shader, fragment_shader );
   
   GLuint MatrixID = glGetUniformLocation(programID, "MVP");
+  
+  // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+  // glm::mat4 Projection = glm::perspective(glm::radians(90.0f), 3.0f / 3.0f, 0.1f, 100.0f);
   glm::mat4 Projection = glm::ortho(-1.0f, 1.0f,-1.0f,1.0f, -0.5f, 1000.0f);
   
   // Camera matrix
   glm::mat4 View       = glm::lookAt(
-    glm::vec3(0,0,-1), // Camera Location
-    glm::vec3(0,0,0), // Looks at the origin
-    glm::vec3(0,1,0)  // Camera up is +Y
+    glm::vec3(0,0,-1), // Camera is at (4,3,3), in World Space
+    glm::vec3(0,0,0), // and looks at the origin
+    glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
   );
+  // Model matrix : an identity matrix (model will be at the origin)
   glm::mat4 Model      = glm::mat4(1.0f);
-  glm::mat4 MVP        = Projection * View * Model; 
+  // Our ModelViewProjection : multiplication of our 3 matrices
+  glm::mat4 MVP        = Projection * View * Model; // Remember, matrix multiplication is the other way around
+  //Everything above here is fine--now custom texture stuff
+  
+  GLuint textureID;
+  glGenTextures(1, &textureID);
+  
+  // "Bind" the newly created texture : all future texture functions will modify this texture
+  glBindTexture(GL_TEXTURE_2D, textureID);
+  glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, texnx, texny, 0, GL_BGR, GL_FLOAT, tex_array);
+  // 
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+  glGenerateMipmap(GL_TEXTURE_2D);
+  
+  // Get a handle for our "myTextureSampler" uniform
+  GLuint TextureID  = glGetUniformLocation(programID, "myTextureSampler");
   
   static const GLfloat g_vertex_buffer_data[] = {
     -1.0f,-1.0f, 0.0f,
@@ -82,19 +128,11 @@ int open_window_rcpp(const CharacterVector vertex_shader, const CharacterVector 
   };
   
   GLuint uTime;
-  if(type == 1) {
-    uTime = glGetUniformLocation(programID, "u_time");
-  } else {
-    uTime = glGetUniformLocation(programID, "iTime");
-  }
+  uTime = glGetUniformLocation(programID, "u_time");
   float t = 0;
   
   GLuint screenResolution;
-  if(type == 1) {
-    screenResolution = glGetUniformLocation(programID, "u_resolution");
-  } else {
-    screenResolution = glGetUniformLocation(programID, "iResolution");
-  }
+  screenResolution = glGetUniformLocation(programID, "u_resolution");
   
   GLuint mousePos;
   mousePos = glGetUniformLocation(programID, "u_mouse");
@@ -112,7 +150,7 @@ int open_window_rcpp(const CharacterVector vertex_shader, const CharacterVector 
   bool pause = false;
   double xpos, ypos;
   double debounce_time = 0.0;
-
+  
   do{
     // Clear the screen
     if(glfwGetTime() - debounce_time > 0.1) {
@@ -129,7 +167,7 @@ int open_window_rcpp(const CharacterVector vertex_shader, const CharacterVector 
     }
     glfwPollEvents();
     
-      
+    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // Use our shader
@@ -141,6 +179,12 @@ int open_window_rcpp(const CharacterVector vertex_shader, const CharacterVector 
     // Send our transformation to the currently bound shader,
     // in the "MVP" uniform
     glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+    
+    // Bind our texture in Texture Unit 0
+    // glActiveTexture(GL_TEXTURE0);
+    // glBindTexture(GL_TEXTURE_2D, TextureID);
+    // Set our "myTextureSampler" sampler to use Texture Unit 0
+    // glUniform1i(TextureID, 0);
     
     // 1rst attribute buffer : vertices
     glEnableVertexAttribArray(0);
@@ -176,12 +220,15 @@ int open_window_rcpp(const CharacterVector vertex_shader, const CharacterVector 
     glfwSwapBuffers(window);
     glfwPollEvents();
     
-  } while(!glfwWindowShouldClose(window) && glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS);
+  } // Check if the ESC key was pressed or the window was closed
+  while(!glfwWindowShouldClose(window) && glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS);
   
   glDeleteBuffers(1, &vertexbuffer);
   glDeleteBuffers(1, &uvbuffer);
   glDeleteProgram(programID);
+  // glDeleteTextures(1, &TextureID);
   glDeleteVertexArrays(1, &VertexArrayID);
+  // delete[] tex_array;
   
   glfwWaitEvents();
   glfwDestroyWindow(window);
