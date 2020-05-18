@@ -173,7 +173,12 @@ int open_window_image_rcpp(const CharacterVector vertex_shader, const CharacterV
     // Use our shader
     glUseProgram(programID);
     glUniform1f(uTime, t);
-    glUniform2f(screenResolution, nx*2, ny*2);
+    
+    int width2, height2;
+    
+    glfwGetFramebufferSize(window, &width2, &height2);
+    glViewport(0, 0, width2, height2);
+    glUniform2f(screenResolution, width2, height2);
     glUniform2f(mousePos, xpos, ypos);
     
     // Send our transformation to the currently bound shader,

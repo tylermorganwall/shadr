@@ -41,7 +41,7 @@ int open_window_rcpp(const CharacterVector vertex_shader, const CharacterVector 
   // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   
   glfwPollEvents();
-  glfwSetCursorPos(window, nx/2, ny/2);
+  // glfwSetCursorPos(window, nx/2, ny/2);
   glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
   
   GLuint VertexArrayID;
@@ -135,7 +135,12 @@ int open_window_rcpp(const CharacterVector vertex_shader, const CharacterVector 
     // Use our shader
     glUseProgram(programID);
     glUniform1f(uTime, t);
-    glUniform2f(screenResolution, nx*2, ny*2);
+    
+    int width2, height2;
+    glfwGetFramebufferSize(window, &width2, &height2);
+    glViewport(0, 0, width2, height2);    
+    
+    glUniform2f(screenResolution, width2, height2);
     glUniform2f(mousePos, xpos, ypos);
     
     // Send our transformation to the currently bound shader,

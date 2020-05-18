@@ -1,0 +1,12 @@
+BASE_DIR_GLEW = C:/Users/tyler/Documents/glew-2.1.0-win32/glew-2.1.0
+BASE_DIR_GLFW64 = C:/Users/tyler/Documents/glfw-3.3.2.bin.WIN64/glfw-3.3.2.bin.WIN64
+BASE_DIR_GLFW32 = C:/Users/tyler/Documents/glfw-3.3.2.bin.WIN32/glfw-3.3.2.bin.WIN32
+
+CXX_STD = CXX11
+ifeq "$(WIN)" "64"
+PKG_LIBS = -L"$(BASE_DIR_GLFW64)/lib-mingw-w64" -L"$(BASE_DIR_GLEW)/bin/Release/x64" -lglfw3 -lglew32 -lgdi32 -lopengl32
+PKG_CXXFLAGS = -I"$(BASE_DIR_GLFW64)/include" -I"$(BASE_DIR_GLEW)/include"
+else
+PKG_LIBS = -L"$(BASE_DIR_GLFW32)/lib-mingw" -L"$(BASE_DIR_GLEW)/bin/Release/Win32" -lglfw3 -lglew32 -lgdi32 -lopengl32
+PKG_CXXFLAGS = -I"$(BASE_DIR_GLFW32)/include" -I"$(BASE_DIR_GLEW)/include"
+endif

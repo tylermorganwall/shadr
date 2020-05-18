@@ -1,12 +1,12 @@
 Package: shadr
 Type: Package
-Title: What the Package Does in One 'Title Case' Line
-Version: 1.0
+Title: GLSL Shaders in R
+Version: 0.1.0
 Date: 2020-05-15
-Author: Your Name
-Maintainer: Your Name <your@email.com>
-Description: One paragraph description of what the package does as one or more full sentences.
+Author: Tyler Morgan-Wall
+Maintainer: Tyler Morgan-Wall <tylermw@gmail.com>
+Description: Run GLSL shaders in R. 
 License: GPL (>= 2)
 Imports: Rcpp (>= 1.0.4)
 LinkingTo: Rcpp
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0

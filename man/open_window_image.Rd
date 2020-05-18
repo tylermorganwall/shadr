@@ -4,7 +4,7 @@
 \alias{open_window_image}
 \title{Open Window Image}
 \usage{
-open_window_image(vertex, fragment, width = 640, height = 360)
+open_window_image(image, width = 640, height = 360)
 }
 \arguments{
 \item{width}{Window width}
@@ -17,3 +17,4 @@ Open Window Image
 \examples{
 #internal
 }
+\keyword{internal}
