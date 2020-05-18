@@ -23,7 +23,7 @@ fairly straightforward. For Windows 10 instructions it’s a bit more
 complex–skip down to the Windows 10 section.
 
 For macOS and Ubuntu, first download GLFW from either the [GLFW
-website](https://www.glfw.org) via [this
+website](https://www.glfw.org) or via [this
 link](https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.zip).
 
 Now, unzip the folder and open it up in the terminal. Run the following:
@@ -60,7 +60,7 @@ And clean and rebuild in the package.
 
 ### Ubuntu
 
-On Ubuntu 20.04, I also had to install a series of libraries before
+On Ubuntu 20.04, I also had to install several libraries before
 installing GLFW:
 
 ``` sh
@@ -98,13 +98,14 @@ version of R, in all cases. I’ll update these instructions once I figure
 out what’s wrong with the 32-bit installation.*
 
 GFLW: [Link to page](https://www.glfw.org/download.html) with
-pre-compiled binaries. [Direct link for 64-bit
-binaries](https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.bin.WIN64.zip)
-[Direct link for 32-bit
-binaries](https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.bin.WIN32.zip)
-GLEW: [Link to page](http://glew.sourceforge.net) with pre-compiled
-binaries. [Direct link to
-binaries](https://sourceforge.net/projects/glew/files/glew/2.1.0/glew-2.1.0-win32.zip/download)
+pre-compiled binaries. [Direct
+link](https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.bin.WIN64.zip)
+for 64-bit binaries [Direct
+link](https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.bin.WIN32.zip)
+for 32-bit binaries GLEW: [Link to page](http://glew.sourceforge.net)
+with pre-compiled binaries. [Direct
+link](https://sourceforge.net/projects/glew/files/glew/2.1.0/glew-2.1.0-win32.zip/download)
+to binaries
 
 Unzip the files into the directory of your choice.
 
@@ -116,9 +117,9 @@ git clone https://github.com/tylermorganwall/shadr
 
 You will now need to change the `src/Makevars.win` file to point to the
 pre-compiled binaries. There are three variables at the top of the file.
-Change them to point to the directories you just downloaded on your
-filesystem (I have left my directories in the file so you can see an
-example):
+Change them to point to the directories you just downloaded and unzipped
+on your filesystem (I have left my directories in the file so you can
+see an example):
 
 ``` sh
 BASE_DIR_GLEW = C:/Users/tyler/Documents/glew-2.1.0-win32/glew-2.1.0
@@ -126,7 +127,7 @@ BASE_DIR_GLFW64 = C:/Users/tyler/Documents/glfw-3.3.2.bin.WIN64/glfw-3.3.2.bin.W
 BASE_DIR_GLFW32 = C:/Users/tyler/Documents/glfw-3.3.2.bin.WIN32/glfw-3.3.2.bin.WIN32
 ```
 
-Now open the `shadr.proj` file in the `shady` directory to open RStudio,
+Now open the `shadr.proj` file in the `shadr` directory to open RStudio,
 select “Clean and Rebuild” in the Build menu, and the package will be
 installed.
 
@@ -146,7 +147,7 @@ cmake -G"MinGW Makefiles" ..
 mingw32-make.exe
 ```
 
-Do the same for GLEW, but you have to go to the `glew-2.1.0/build/cmake`
+Do the same for GLEW, but first go to the `glew-2.1.0/build/cmake`
 directory before running the following:
 
 ``` sh
@@ -156,15 +157,14 @@ cmake -G"MinGW Makefiles" ..
 mingw32-make.exe
 ```
 
-Now, go in the `Makevars.win` and replace everything there with the
-following:
+Now, go into `Makevars.win` and replace everything with the following:
 
 ``` make
 CXX_STD = CXX11
 PKG_LIBS = -lglfw3 -lglew32 -lgdi32 -lopengl32
 ```
 
-Now open the `shadr.proj` file in the `shady` directory to open RStudio,
+Now open the `shadr.proj` file in the `shadr` directory to open RStudio,
 select “Clean and Rebuild” in the Build menu, and the package will be
 installed. Hopefully.
 
