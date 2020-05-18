@@ -3,6 +3,8 @@
 
 # shadr
 
+<img src="man/figures/sdf2.gif" />
+
 <!-- badges: start -->
 
 [![Lifecycle:
@@ -45,7 +47,16 @@ cd glew-2.1.0
 sudo make install
 ```
 
-Hopefully, you should be good to go.
+Hopefully, you should be good to go. Try installing the package–if it
+doesn’t work, clone the repo, open up the project, change the
+src/Makevars file to the following:
+
+``` make
+CXX_STD = CXX11
+PKG_LIBS = -lglfw3 -lGLEW -framework Cocoa
+```
+
+And clean and rebuild in the package.
 
 ### Ubuntu
 
@@ -161,11 +172,11 @@ installed. Hopefully.
 
 If you haven’t played with shaders before, check out [The Book of
 Shaders](https://www.thebookofshaders.com) (no affiliation) for a nice
-intro tutorial. Then check out lots of simple to advanced examples on
-[Shadertoy](https://www.shadertoy.com).
+intro tutorial. Then check out [Shadertoy](https://www.shadertoy.com)
+for a wide variety of samples.
 
-I haven’t yet included the ability to pull screenshots, so here are some
-manually captured gifs.
+I haven’t yet included the ability to pull screenshots (coming\!), so
+here are some manually captured gifs.
 
 Let’s start with a bouncing ball:
 
@@ -193,6 +204,8 @@ void main(){
 run_shader(fragmentshader, width=800,height=800) 
 ```
 
+<img src="man/figures/bouncing.gif" />
+
 Rendering and animating a signed distance field:
 
 ``` r
@@ -218,6 +231,8 @@ void main(){
 
 run_shader(fragmentshader, width=800,height=800) 
 ```
+
+<img src="man/figures/sdf2.gif" />
 
 Here’s a complex one: “Seascape” by Alexander Alekseev aka TDM - 2014
 (License Creative Commons Attribution-NonCommercial-ShareAlike 3.0
@@ -416,3 +431,5 @@ void main( ) {
 
 run_shader(fragmentshader, width=800,height=800) 
 ```
+
+<img src="man/figures/water2.gif" />
