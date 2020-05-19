@@ -1,11 +1,11 @@
 Package: shadr
 Type: Package
 Title: GLSL Shaders in R
-Version: 0.1.0
+Version: 0.2.0
 Date: 2020-05-15
 Author: Tyler Morgan-Wall
 Maintainer: Tyler Morgan-Wall <tylermw@gmail.com>
-Description: Run GLSL shaders in R. 
+Description: Run and captures videos and snapshots GLSL shaders.
 License: GPL (>= 2)
 Imports: Rcpp (>= 1.0.4)
 LinkingTo: Rcpp

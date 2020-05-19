@@ -17,7 +17,8 @@ run_shader(
   width = 640,
   height = 360,
   type = "glfw",
-  replace = TRUE
+  replace = TRUE,
+  verbose = interactive()
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ run_shader(
 \item{replace}{Default `TRUE`. If `type = "shadertoy"`, this will parse and replace `mainImage(...)`
 with `main()`, `fragCoord` with `gl_FragCoord`, and `fragColor` with `color`. Note that `color` here
 is a `vec3`, while it's a `vec4` on `shadertoy` (you will have to account for this yourself).}
+
+\item{verbose}{Default `interactive()`. If `TRUE`, will output status messages.}
 }
 \description{
 Run Shader
@@ -65,7 +68,9 @@ void main() {
  vec2 st = gl_FragCoord.xy/(u_resolution);
  color = vec3(st.x,st.y,0.0);
 }"
+\donttest{
 run_shader(fragmentshader, width=800, height=800)
+}
 
 #Animating a signed distance field with time
 fragmentshader = "#version 330 core
@@ -87,7 +92,9 @@ void main(){
  // Visualize the distance field
  color = vec3(smoothstep(fract(d*abs(sin(u_time))*10.0),0.2,0.8));
 }"
+\donttest{
 run_shader(fragmentshader, width=800, height=800)
+}
 
 #Animating between colors:
 fragmentshader = "#version 330 core
@@ -103,7 +110,9 @@ void main() {
  float pct = abs(sin(u_time*4));
  color = mix(colorA, colorB, pct);
 }"
+\donttest{
 run_shader(fragmentshader, width=800, height=800)
+}
 
 #A moving, bouncing ball
 fragmentshader = "#version 330 core
@@ -123,5 +132,7 @@ void main(){
  pct = smoothstep(length(toCenter)-0.2,0.1 * abs(sin(u_time*4.0)),0.8);
  color = mix(colorA,colorB,pct);
 }"
+\donttest{
 run_shader(fragmentshader, width=800, height=800)
+}
 }

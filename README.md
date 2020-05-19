@@ -51,7 +51,7 @@ Hopefully, you should be good to go. Try installing the package–if it
 doesn’t work, clone the repo, open up the project, change the
 src/Makevars file to the following:
 
-``` make
+``` sh
 CXX_STD = CXX11
 PKG_LIBS = -lglfw3 -lGLEW -framework Cocoa
 ```
@@ -159,7 +159,7 @@ mingw32-make.exe
 
 Now, go into `Makevars.win` and replace everything with the following:
 
-``` make
+``` sh
 CXX_STD = CXX11
 PKG_LIBS = -lglfw3 -lglew32 -lgdi32 -lopengl32
 ```
@@ -174,9 +174,6 @@ If you haven’t played with shaders before, check out [The Book of
 Shaders](https://www.thebookofshaders.com) (no affiliation) for a nice
 intro tutorial. Then check out [Shadertoy](https://www.shadertoy.com)
 for a wide variety of samples.
-
-I haven’t yet included the ability to pull screenshots (coming\!), so
-here are some manually captured gifs.
 
 Let’s start with a bouncing ball:
 
@@ -201,10 +198,26 @@ void main(){
   color = mix(colorA,colorB,pct);
 }"
 
+#This just runs the shader--to generate the gif, we'll run generate_shader_movie()
 run_shader(fragmentshader, width=800,height=800) 
 ```
 
 <img src="man/figures/bouncing.gif" />
+
+That just ran the shader on your system–to generate a movie, we’ll run
+`generate_shader_movie()` (the following chunk is not evaluated, since
+the output is the same as above):
+
+``` r
+#Generate a mp4:
+generate_shader_movie(fragmentshader, filename = "output.mp4",
+                      width=800,height=800) 
+
+#Generate a gif (decreasing the number of frames since gifs are larger):
+generate_shader_movie(fragmentshader, filename = "output.gif", 
+                      frames=60, timestep = pi/180*6,
+                      width=500,height=500) 
+```
 
 Rendering and animating a signed distance field:
 
@@ -233,6 +246,20 @@ run_shader(fragmentshader, width=800,height=800)
 ```
 
 <img src="man/figures/sdf2.gif" />
+
+We can also take a single snapshot at a specified time with
+`generate_shader_snapshot()`.
+
+``` r
+
+par(mfrow=c(2,2))
+generate_shader_snapshot(fragmentshader, width=800,height=800, time=pi/8)
+generate_shader_snapshot(fragmentshader, width=800,height=800, time=2*pi/8)
+generate_shader_snapshot(fragmentshader, width=800,height=800, time=3*pi/8)
+generate_shader_snapshot(fragmentshader, width=800,height=800, time=4*pi/8)
+```
+
+<img src="man/figures/README-snapshots-1.png" width="100%" />
 
 Here’s a complex one: “Seascape” by Alexander Alekseev aka TDM - 2014
 (License Creative Commons Attribution-NonCommercial-ShareAlike 3.0

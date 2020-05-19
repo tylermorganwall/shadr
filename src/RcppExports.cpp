@@ -5,9 +5,9 @@
 
 using namespace Rcpp;
 
-// open_window_rcpp
-int open_window_rcpp(const CharacterVector vertex_shader, const CharacterVector fragment_shader, int width, int height, int type);
-RcppExport SEXP _shadr_open_window_rcpp(SEXP vertex_shaderSEXP, SEXP fragment_shaderSEXP, SEXP widthSEXP, SEXP heightSEXP, SEXP typeSEXP) {
+// generate_video_rcpp
+int generate_video_rcpp(const CharacterVector vertex_shader, const CharacterVector fragment_shader, int width, int height, int type, bool verbose, float step, int frames, CharacterVector filename);
+RcppExport SEXP _shadr_generate_video_rcpp(SEXP vertex_shaderSEXP, SEXP fragment_shaderSEXP, SEXP widthSEXP, SEXP heightSEXP, SEXP typeSEXP, SEXP verboseSEXP, SEXP stepSEXP, SEXP framesSEXP, SEXP filenameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -16,13 +16,17 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type width(widthSEXP);
     Rcpp::traits::input_parameter< int >::type height(heightSEXP);
     Rcpp::traits::input_parameter< int >::type type(typeSEXP);
-    rcpp_result_gen = Rcpp::wrap(open_window_rcpp(vertex_shader, fragment_shader, width, height, type));
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    Rcpp::traits::input_parameter< float >::type step(stepSEXP);
+    Rcpp::traits::input_parameter< int >::type frames(framesSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type filename(filenameSEXP);
+    rcpp_result_gen = Rcpp::wrap(generate_video_rcpp(vertex_shader, fragment_shader, width, height, type, verbose, step, frames, filename));
     return rcpp_result_gen;
 END_RCPP
 }
-// open_window_image_rcpp
-int open_window_image_rcpp(const CharacterVector vertex_shader, const CharacterVector fragment_shader, int width, int height, NumericMatrix& r_layer, NumericMatrix& g_layer, NumericMatrix& b_layer);
-RcppExport SEXP _shadr_open_window_image_rcpp(SEXP vertex_shaderSEXP, SEXP fragment_shaderSEXP, SEXP widthSEXP, SEXP heightSEXP, SEXP r_layerSEXP, SEXP g_layerSEXP, SEXP b_layerSEXP) {
+// open_window_rcpp
+int open_window_rcpp(const CharacterVector vertex_shader, const CharacterVector fragment_shader, int width, int height, int type, bool verbose);
+RcppExport SEXP _shadr_open_window_rcpp(SEXP vertex_shaderSEXP, SEXP fragment_shaderSEXP, SEXP widthSEXP, SEXP heightSEXP, SEXP typeSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -30,17 +34,35 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const CharacterVector >::type fragment_shader(fragment_shaderSEXP);
     Rcpp::traits::input_parameter< int >::type width(widthSEXP);
     Rcpp::traits::input_parameter< int >::type height(heightSEXP);
+    Rcpp::traits::input_parameter< int >::type type(typeSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(open_window_rcpp(vertex_shader, fragment_shader, width, height, type, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
+// open_window_image_rcpp
+int open_window_image_rcpp(const CharacterVector vertex_shader, const CharacterVector fragment_shader, int width, int height, bool verbose, NumericMatrix& r_layer, NumericMatrix& g_layer, NumericMatrix& b_layer);
+RcppExport SEXP _shadr_open_window_image_rcpp(SEXP vertex_shaderSEXP, SEXP fragment_shaderSEXP, SEXP widthSEXP, SEXP heightSEXP, SEXP verboseSEXP, SEXP r_layerSEXP, SEXP g_layerSEXP, SEXP b_layerSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const CharacterVector >::type vertex_shader(vertex_shaderSEXP);
+    Rcpp::traits::input_parameter< const CharacterVector >::type fragment_shader(fragment_shaderSEXP);
+    Rcpp::traits::input_parameter< int >::type width(widthSEXP);
+    Rcpp::traits::input_parameter< int >::type height(heightSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
     Rcpp::traits::input_parameter< NumericMatrix& >::type r_layer(r_layerSEXP);
     Rcpp::traits::input_parameter< NumericMatrix& >::type g_layer(g_layerSEXP);
     Rcpp::traits::input_parameter< NumericMatrix& >::type b_layer(b_layerSEXP);
-    rcpp_result_gen = Rcpp::wrap(open_window_image_rcpp(vertex_shader, fragment_shader, width, height, r_layer, g_layer, b_layer));
+    rcpp_result_gen = Rcpp::wrap(open_window_image_rcpp(vertex_shader, fragment_shader, width, height, verbose, r_layer, g_layer, b_layer));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_shadr_open_window_rcpp", (DL_FUNC) &_shadr_open_window_rcpp, 5},
-    {"_shadr_open_window_image_rcpp", (DL_FUNC) &_shadr_open_window_image_rcpp, 7},
+    {"_shadr_generate_video_rcpp", (DL_FUNC) &_shadr_generate_video_rcpp, 9},
+    {"_shadr_open_window_rcpp", (DL_FUNC) &_shadr_open_window_rcpp, 6},
+    {"_shadr_open_window_image_rcpp", (DL_FUNC) &_shadr_open_window_image_rcpp, 8},
     {NULL, NULL, 0}
 };
 

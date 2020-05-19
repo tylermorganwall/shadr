@@ -11,6 +11,7 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+library(shadr)
 ```
 
 # shadr
@@ -52,7 +53,7 @@ sudo make install
 
 Hopefully, you should be good to go. Try installing the package--if it doesn't work, clone the repo, open up the project, change the src/Makevars file to the following:
 
-```{make,eval=FALSE}
+```{sh, eval=FALSE}
 CXX_STD = CXX11
 PKG_LIBS = -lglfw3 -lGLEW -framework Cocoa
 
@@ -142,7 +143,7 @@ mingw32-make.exe
 
 Now, go into `Makevars.win` and replace everything with the following:
 
-```{make, eval=FALSE}
+```{sh, eval=FALSE}
 CXX_STD = CXX11
 PKG_LIBS = -lglfw3 -lglew32 -lgdi32 -lopengl32
 
@@ -153,8 +154,6 @@ Now open the `shadr.proj` file in the `shadr` directory to open RStudio, select 
 ## Examples
 
 If you haven't played with shaders before, check out [The Book of Shaders](https://www.thebookofshaders.com) (no affiliation) for a nice intro tutorial. Then check out [Shadertoy](https://www.shadertoy.com) for a wide variety of samples.
-
-I haven't yet included the ability to pull screenshots (coming!), so here are some manually captured gifs.
 
 Let's start with a bouncing ball:
 
@@ -179,11 +178,27 @@ void main(){
   color = mix(colorA,colorB,pct);
 }"
 
+#This just runs the shader--to generate the gif, we'll run generate_shader_movie()
 run_shader(fragmentshader, width=800,height=800) 
 
 ```
 
  <img src="man/figures/bouncing.gif" />
+ 
+That just ran the shader on your system--to generate a movie, we'll run `generate_shader_movie()` (the following chunk is not evaluated, since the output is the same as above):
+
+ 
+```{r, eval=FALSE}
+#Generate a mp4:
+generate_shader_movie(fragmentshader, filename = "output.mp4",
+                      width=800,height=800) 
+
+#Generate a gif (decreasing the number of frames since gifs are larger):
+generate_shader_movie(fragmentshader, filename = "output.gif", 
+                      frames=60, timestep = pi/180*6,
+                      width=500,height=500) 
+
+```
  
 Rendering and animating a signed distance field:
 
@@ -213,6 +228,41 @@ run_shader(fragmentshader, width=800,height=800)
 ```
 
  <img src="man/figures/sdf2.gif" />
+ 
+```{r, include=FALSE}
+fragmentshader = "#version 330 core
+uniform vec2 u_resolution;
+uniform float u_time;
+out vec3 color;
+
+void main(){
+  vec2 st = gl_FragCoord.xy/u_resolution.xy;
+  st.x *= u_resolution.x/u_resolution.y;
+  float d = 0.0;
+
+  // Remap the space to -1. to 1.
+  st = st *2.0-1.0;
+
+  // Make the distance field
+  d = length( abs(st)-.3 );
+
+  // Visualize the distance field
+  color = vec3(smoothstep(fract(d*abs(sin(u_time))*10.0),0.2,0.8));
+}"
+
+```
+ 
+We can also take a single snapshot at a specified time with `generate_shader_snapshot()`. 
+
+```{r snapshots, fig.width=12, fig.height=12}
+
+par(mfrow=c(2,2))
+generate_shader_snapshot(fragmentshader, width=800,height=800, time=pi/8)
+generate_shader_snapshot(fragmentshader, width=800,height=800, time=2*pi/8)
+generate_shader_snapshot(fragmentshader, width=800,height=800, time=3*pi/8)
+generate_shader_snapshot(fragmentshader, width=800,height=800, time=4*pi/8)
+
+```
  
 Here's a complex one: "Seascape" by Alexander Alekseev aka TDM - 2014 (License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License), translated for `shadr`.
 

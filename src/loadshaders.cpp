@@ -5,7 +5,9 @@
 //GLWF3 Installed with cmake, make install 
 #include <GLFW/glfw3.h>
 
-GLuint LoadShaders(const Rcpp::CharacterVector vertex_shader, const Rcpp::CharacterVector fragment_shader){
+GLuint LoadShaders(const Rcpp::CharacterVector vertex_shader, 
+                   const Rcpp::CharacterVector fragment_shader,
+                   bool verbose){
   
   // Create the shaders
   GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -49,7 +51,9 @@ GLuint LoadShaders(const Rcpp::CharacterVector vertex_shader, const Rcpp::Charac
   }
   
   // Link the program
-  Rcpp::Rcout << "Linking program\n";
+  if(verbose) {
+    Rcpp::Rcout << "Linking program\n";
+  }
   GLuint ProgramID = glCreateProgram();
   glAttachShader(ProgramID, VertexShaderID);
   glAttachShader(ProgramID, FragmentShaderID);

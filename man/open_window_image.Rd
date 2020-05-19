@@ -4,12 +4,14 @@
 \alias{open_window_image}
 \title{Open Window Image}
 \usage{
-open_window_image(image, width = 640, height = 360)
+open_window_image(image, width = 640, height = 360, verbose = interactive())
 }
 \arguments{
 \item{width}{Window width}
 
 \item{height}{Window height}
+
+\item{verbose}{Default `interactive()`. If `TRUE`, will output status messages.}
 }
 \description{
 Open Window Image

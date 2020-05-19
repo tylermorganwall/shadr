@@ -12,7 +12,8 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 int open_window_rcpp(const CharacterVector vertex_shader, const CharacterVector fragment_shader,
-                    int width, int height, int type) {
+                    int width, int height, int type, bool verbose) {
+  glfwInitHint(GLFW_COCOA_CHDIR_RESOURCES, GLFW_FALSE);
   if(!glfwInit()){
     return(-1);
   }
@@ -49,7 +50,7 @@ int open_window_rcpp(const CharacterVector vertex_shader, const CharacterVector 
   glBindVertexArray(VertexArrayID);
   
   // Create and compile our GLSL program from the shaders
-  GLuint programID = LoadShaders( vertex_shader, fragment_shader );
+  GLuint programID = LoadShaders( vertex_shader, fragment_shader, verbose);
   
   GLuint MatrixID = glGetUniformLocation(programID, "MVP");
   glm::mat4 Projection = glm::ortho(-1.0f, 1.0f,-1.0f,1.0f, -0.5f, 1000.0f);
