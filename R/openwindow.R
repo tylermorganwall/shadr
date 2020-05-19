@@ -127,7 +127,7 @@ run_shader = function(fragment, vertex=NULL, width=640, height=360,
   if(verbose) {
     message("Hit [space] to pause and [esc] to close.")
   }
-  open_window_rcpp(vertex, fragment, width, height, verbose, typeval)
+  open_window_rcpp(vertex, fragment, width, height, typeval,verbose)
 }
 
 #'@title Generate Shader Snapshot
