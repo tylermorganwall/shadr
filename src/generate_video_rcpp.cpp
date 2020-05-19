@@ -179,7 +179,7 @@ int generate_video_rcpp(const CharacterVector vertex_shader, const CharacterVect
     );
 
     // Draw the triangle !
-    glDrawArrays(GL_TRIANGLES, 0, 2*3); // 12*3 indices starting at 0 -> 12 triangles
+    glDrawArrays(GL_TRIANGLES, 0, 2*3); 
 
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);

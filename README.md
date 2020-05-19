@@ -56,7 +56,15 @@ CXX_STD = CXX11
 PKG_LIBS = -lglfw3 -lGLEW -framework Cocoa
 ```
 
-And clean and rebuild in the package.
+If you’re installing GLFW via `brew`, remove the `3` from the the
+`-lgfw3` library
+
+``` sh
+CXX_STD = CXX11
+PKG_LIBS = -lglfw -lGLEW -framework Cocoa
+```
+
+Now, clean and rebuild in the package.
 
 ### Ubuntu
 

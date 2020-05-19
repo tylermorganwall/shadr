@@ -307,7 +307,7 @@ generate_shader_video = function(fragment, filename="output.mp4", vertex=NULL,
   if(verbose) {
     message("Hit [space] to pause and [esc] to close.")
   }
-  generate_video_rcpp(vertex, fragment, width, height, verbose, typeval, 
+  generate_video_rcpp(vertex, fragment, width, height, typeval, verbose,
                       step=timestep, frames=frames,
                       filename = tempfilename)
   if(tools::file_ext(filename) == "mp4") {
