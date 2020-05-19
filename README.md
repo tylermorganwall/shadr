@@ -65,12 +65,11 @@ brew install glfw
 brew install glew
 ```
 
-And remove the `3` from the the `-lgfw3` library in Makevars (plus add
-the above `-framework Cocoa` entry):
+And change Makevars to the following:
 
 ``` sh
 CXX_STD = CXX11
-PKG_LIBS = -lglfw -lGLEW -framework Cocoa
+PKG_LIBS = -L/usr/local/lib -lglfw -lGLEW -framework Cocoa
 ```
 
 Now, clean and rebuild in the package.
