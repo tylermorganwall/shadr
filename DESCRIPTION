@@ -8,5 +8,9 @@ Maintainer: Tyler Morgan-Wall <tylermw@gmail.com>
 Description: Run and captures videos and snapshots GLSL shaders.
 License: GPL (>= 2)
 Imports: Rcpp (>= 1.0.4)
+Suggests:
+    rayimage,
+    av,
+    gifski
 LinkingTo: Rcpp
 RoxygenNote: 7.1.0
