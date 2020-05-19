@@ -134,8 +134,14 @@ git clone https://github.com/tylermorganwall/shadr
 You will now need to change the `src/Makevars.win` file to point to the
 pre-compiled binaries. There are three variables at the top of the file.
 Change them to point to the directories you just downloaded and unzipped
-on your filesystem (I have left my directories in the file so you can
-see an example):
+on your filesystem. You also need to add
+`.../glfw-3.3.2.bin.WIN64/lib-mingw-w64` (or
+`.../glfw-3.3.2.bin.WIN64/lib-mingw-w32` for 32-bit) and
+`.../glew-2.1.0-win32/glew-2.1.0/bin/Release/x64` (or
+`.../glew-2.1.0-win32/glew-2.1.0/bin/Release/Win32` for 32-bit) to your
+Path environment variable. The `...` signifies the path on your system
+to those folders (I have left my directories in the file so you can see
+an example).
 
 ``` sh
 BASE_DIR_GLEW = C:/Users/tyler/Documents/glew-2.1.0-win32/glew-2.1.0
@@ -153,14 +159,15 @@ If the above process doesn’t work for you, you will need to compile GLEW
 and GLFW yourself. First, download the source files. You will also need
 to add `C:/Rtools/mingw_64/bin/` (or wherever Rtools is) to your PATH
 environment variable. Navigate to the GLFW source folder in a terminal
-and run the following:
+and run the following (make sure to run as an Administrator for both
+cases):
 
 ``` sh
 cd glfw-3.3.2
 mkdir build
 cd build
 cmake -G"MinGW Makefiles" ..
-mingw32-make.exe
+mingw32-make.exe install
 ```
 
 Do the same for GLEW, but first go to the `glew-2.1.0/build/cmake`
@@ -170,19 +177,24 @@ directory before running the following:
 mkdir build
 cd build
 cmake -G"MinGW Makefiles" ..
-mingw32-make.exe
+mingw32-make.exe install
 ```
 
-Now, go into `Makevars.win` and replace everything with the following:
+This will have installed two directories, `GLFW` and `glew`, into the
+`Program Files (x86)` directory. Then add `C:\Program Files
+(x86)\GLFW\lib` and `C:\Program Files (x86)\glew\bin` to your Path
+environment variable. Now, go into `Makevars.win` and replace everything
+with the following:
 
 ``` sh
 CXX_STD = CXX11
-PKG_LIBS = -lglfw3 -lglew32 -lgdi32 -lopengl32
+PKG_LIBS = -L"C:/Program Files (x86)/GLFW/lib" -L"C:/Program Files (x86)/glew/lib" -lglfw3 -lglew32 -lgdi32 -lopengl32
+PKG_CPPFLAGS = -I"C:/Program Files (x86)/GLFW/include" -I"C:/Program Files (x86)/glew/include"
 ```
 
 Now open the `shadr.proj` file in the `shadr` directory to open RStudio,
 select “Clean and Rebuild” in the Build menu, and the package will be
-installed. Hopefully.
+installed. Hopefully. :)
 
 ## Examples
 
