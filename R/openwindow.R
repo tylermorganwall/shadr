@@ -191,11 +191,6 @@ generate_shader_snapshot = function(fragment, time = 0, filename=NULL, vertex=NU
     	gl_Position =  vec4(vertexPosition_modelspace,1);
     }"
   }
-  if(!is.null(filename)) {
-    if(tools::file_ext(filename) != "png") {
-      filename = paste0(filename,".png")
-    }
-  }
   nofilename = FALSE
   if(is.null(filename)) {
     nofilename = TRUE
