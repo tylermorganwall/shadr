@@ -25,6 +25,8 @@ complex–skip down to the Windows 10 section.
 For macOS and Ubuntu, first download GLFW from either the [GLFW
 website](https://www.glfw.org) or via [this
 link](https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.zip).
+If you’re installing via Brew on macOS, skip down to those instructions
+(no need to download).
 
 Now, unzip the folder and open it up in the terminal. Run the following:
 
@@ -56,8 +58,15 @@ CXX_STD = CXX11
 PKG_LIBS = -lglfw3 -lGLEW -framework Cocoa
 ```
 
-If you’re installing GLFW via `brew`, remove the `3` from the the
-`-lgfw3` library
+To install GLFW/GLEW via `brew`, run the following:
+
+``` sh
+brew install glfw
+brew install glew
+```
+
+And remove the `3` from the the `-lgfw3` library in Makevars (plus add
+the above `-framework Cocoa` entry):
 
 ``` sh
 CXX_STD = CXX11
