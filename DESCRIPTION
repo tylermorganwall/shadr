@@ -1,7 +1,7 @@
 Package: shadr
 Type: Package
 Title: GLSL Shaders in R
-Version: 0.2.0
+Version: 0.2.1
 Date: 2020-05-15
 Author: Tyler Morgan-Wall
 Maintainer: Tyler Morgan-Wall <tylermw@gmail.com>

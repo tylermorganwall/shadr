@@ -218,7 +218,7 @@ generate_shader_snapshot = function(fragment, time = 0, filename=NULL, vertex=NU
 }
 
 
-#'@title Generate Shader Video
+#'@title Generate Shader Movie
 #'
 #'
 #'@param fragment Fragment shader.
@@ -232,12 +232,12 @@ generate_shader_snapshot = function(fragment, time = 0, filename=NULL, vertex=NU
 #'with `main()`, `fragCoord` with `gl_FragCoord`, and `fragColor` with `color`. Note that `color` here
 #'is a `vec3`, while it's a `vec4` on `shadertoy` (you will have to account for this yourself).
 #'@param verbose Default `interactive()`. If `TRUE`, will output status messages.
-#'@param timestep Default `pi/180`. The timestep in the video.
-#'@param frames Default `360`. Number of frames to generate in the video.
+#'@param timestep Default `pi/180`. The timestep in the movie.
+#'@param frames Default `360`. Number of frames to generate in the movie.
 #'@param framerate Default `30`. Frames per second.
 #'@export
 #'@examples
-#'#We'll create a shader and generate a video:
+#'#We'll create a shader and generate a movie:
 #'fragmentshader = "#version 330 core
 #'uniform vec2 u_resolution;
 #'uniform float u_time;
@@ -266,11 +266,11 @@ generate_shader_snapshot = function(fragment, time = 0, filename=NULL, vertex=NU
 #'  color = vec3(smoothstep(fract(d*abs(sin(u_time)*10)),0.2,0.8));
 #'}"
 #'\donttest{
-#'generate_shader_video(fragmentshader, filename="sdf.mp4", width=500, height=500)
-#'generate_shader_video(fragmentshader, filename="sdf.gif", timestep = pi/180*6,
+#'generate_shader_movie(fragmentshader, filename="sdf.mp4", width=500, height=500)
+#'generate_shader_movie(fragmentshader, filename="sdf.gif", timestep = pi/180*6,
 #'                      width=500, height=500, frames=60, framerate = 15)
 #'}
-generate_shader_video = function(fragment, filename="output.mp4", vertex=NULL, 
+generate_shader_movie = function(fragment, filename="output.mp4", vertex=NULL, 
                                  width=640, height=360,
                                  type = "glfw", replace = TRUE, verbose = interactive(),
                                  timestep = pi/180, frames = 360, framerate=30) {
